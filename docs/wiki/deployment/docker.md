@@ -341,6 +341,14 @@ Settings that change the index format, including enabling meaning-based search,
 also trigger an automatic background rebuild after restart. A compatible older
 Meilisearch index keeps serving keyword results while its replacement is built.
 
+When a newer Meilisearch image changes its database version, the service
+migrates its data at startup because the Compose file sets `MEILI_UPGRADE_DB`.
+Meilisearch does not make that migration atomic. The index holds no data that
+PostgreSQL does not, so if Meilisearch fails to start after an upgrade, stop it,
+empty `${SILO_DATA_ROOT}/meilisearch`, and start it again; Silo rebuilds the
+index automatically. Set `MEILI_UPGRADE_DB=false` in `.env` to handle upgrades
+yourself.
+
 ## External PostgreSQL and Redis
 
 > [!IMPORTANT]

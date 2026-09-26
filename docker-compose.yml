@@ -46,6 +46,9 @@ services:
         exec /bin/meilisearch
     environment:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-}
+      # Migrate the index in place when a newer image changes Meilisearch's
+      # database version; without it the service exits on every start.
+      MEILI_UPGRADE_DB: ${MEILI_UPGRADE_DB:-true}
     ports:
       - "${MEILISEARCH_HOST:-127.0.0.1}:${MEILISEARCH_PORT:-7700}:7700"
     volumes:
